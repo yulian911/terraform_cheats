@@ -1,12 +1,11 @@
 aws_region   = "eu-central-1"
-project_name = "ansible-lab"
+project_name = "ansible"
 environment  = "dev"
 
 instance_type            = "t3.micro"
-managed_count            = 3
 my_ip_cidr               = "46.205.209.62/32"
 admin_public_key_path    = "C:/Users/julia/.ssh/id_rsa.pub"
 ansible_public_key_path  = "C:/Users/julia/.ssh/ansible_id_rsa.pub"
 ansible_private_key_path = "C:/Users/julia/.ssh/ansible_id_rsa"
-key_name                 = "ansible-lab-key"
+key_name                 = "ansible-key"
 ami_id                   = "ami-02468b0515605b421"

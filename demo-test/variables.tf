@@ -13,7 +13,7 @@ variable "aws_region" {
 variable "project_name" {
   description = "Nazwa projektu używana w tagach i nazwach zasobów"
   type        = string
-  default     = "ansible-lab"
+  default     = "ansible-demo-test"
   nullable    = false
 
   validation {
@@ -46,33 +46,22 @@ variable "instance_type" {
   }
 }
 
-variable "managed_count" {
-  description = "Liczba managed nodes"
+variable "webservers_count" {
+  description = "Liczba webserwerów"
   type        = number
-  default     = 3
+  default     = 2
   nullable    = false
 
   validation {
-    condition     = var.managed_count >= 1 && var.managed_count <= 10
-    error_message = "managed_count musi być w zakresie 1-10."
-  }
-}
-
-variable "my_ip_cidr" {
-  description = "Twój publiczny adres IP w formacie CIDR do SSH, np. 1.2.3.4/32"
-  type        = string
-  nullable    = false
-
-  validation {
-    condition     = can(cidrsubnet(var.my_ip_cidr, 0, 0))
-    error_message = "my_ip_cidr musi być poprawnym CIDR, np. 1.2.3.4/32."
+    condition     = var.webservers_count >= 1 && var.webservers_count <= 10
+    error_message = "webservers_count musi być w zakresie 1-10."
   }
 }
 
 variable "key_name" {
   description = "Nazwa key pair w AWS"
   type        = string
-  default     = "ansible-lab-key"
+  default     = "ansible-key"
   nullable    = false
 
   validation {
@@ -91,7 +80,6 @@ variable "ami_id" {
     error_message = "ami_id musi wyglądać jak poprawne AMI ID, np. ami-1234567890abcdef0."
   }
 }
-
 variable "admin_public_key_path" {
   description = "Ścieżka do lokalnego klucza publicznego administratora"
   type        = string
@@ -113,7 +101,6 @@ variable "ansible_public_key_path" {
     error_message = "ansible_public_key_path nie może być pusty."
   }
 }
-
 variable "ansible_private_key_path" {
   description = "Ścieżka do prywatnego klucza Ansible, który trafi na master"
   type        = string
@@ -125,3 +112,16 @@ variable "ansible_private_key_path" {
     error_message = "ansible_private_key_path nie może być pusty."
   }
 }
+
+
+variable "my_ip_cidr" {
+  description = "Twój publiczny adres IP w formacie CIDR do SSH, np. 1.2.3.4/32"
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = can(cidrsubnet(var.my_ip_cidr, 0, 0))
+    error_message = "my_ip_cidr musi być poprawnym CIDR, np. 1.2.3.4/32."
+  }
+}
+

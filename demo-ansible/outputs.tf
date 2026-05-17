@@ -18,12 +18,16 @@ output "managed_instance_ids" {
   value       = aws_instance.managed[*].id
 }
 
-output "managed_public_ips" {
-  description = "Publiczne IP instancji managed"
-  value       = aws_instance.managed[*].public_ip
-}
+
 
 output "managed_private_ips" {
   description = "Prywatne IP instancji managed"
   value       = aws_instance.managed[*].private_ip
+}
+
+
+
+output "managed_public_ips" {
+  description = "Publiczne IP instancji managed"
+  value = [for i in aws_instance.managed : i.public_ip]
 }

@@ -1,0 +1,55 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - ansible-core
+  - git
+  - python3-pip
+  - jq
+
+users:
+  - default
+
+bootcmd:
+  - mkdir -p /home/ubuntu/.ssh
+  - mkdir -p /home/ubuntu/ansible
+  - chown -R ubuntu:ubuntu /home/ubuntu/.ssh /home/ubuntu/ansible
+
+write_files:
+  - path: /home/ubuntu/.ssh/id_rsa
+    owner: ubuntu:ubuntu
+    permissions: '0600'
+    content: |
+      ${indent(6, trimspace(ansible_private_key))}
+
+  - path: /home/ubuntu/.ssh/id_rsa.pub
+    owner: ubuntu:ubuntu
+    permissions: '0644'
+    content: |
+      ${trimspace(ansible_public_key)}
+
+  - path: /home/ubuntu/.ssh/authorized_keys
+    owner: ubuntu:ubuntu
+    permissions: '0600'
+    content: |
+      ${trimspace(admin_public_key)}
+      ${trimspace(ansible_public_key)}
+
+  - path: /home/ubuntu/ansible/ansible.cfg
+    owner: ubuntu:ubuntu
+    permissions: '0644'
+    content: |
+      [defaults]
+      inventory = ./inventory.ini
+      host_key_checking = False
+      private_key_file = /home/ubuntu/.ssh/id_rsa
+      interpreter_python = auto_silent
+
+runcmd:
+  - chmod 700 /home/ubuntu/.ssh
+  - chmod 600 /home/ubuntu/.ssh/id_rsa
+  - chmod 644 /home/ubuntu/.ssh/id_rsa.pub
+  - chmod 600 /home/ubuntu/.ssh/authorized_keys
+  - chown ubuntu:ubuntu /home/ubuntu/ansible/ansible.cfg
+  - ansible --version
